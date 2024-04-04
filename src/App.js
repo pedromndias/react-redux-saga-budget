@@ -1,65 +1,69 @@
-import { Container, Grid, Icon, Segment } from "semantic-ui-react"
-import './App.css';
+import { Container } from "semantic-ui-react";
+import "./App.css";
 import MainHeader from "./components/MainHeader";
 import NewEntryForm from "./components/NewEntryForm";
 import DisplayBalance from "./components/DisplayBalance";
 import DisplayBalances from "./components/DisplayBalances";
+import { useState } from "react";
+import EntryLines from "./components/EntryLines";
+
+let initialEntries = [
+    {
+        id: 1,
+        description: "Work income",
+        value: "$1000",
+        isExpense: false,
+    },
+    {
+        id: 2,
+        description: "Water bill",
+        value: "$20",
+        isExpense: true,
+    },
+    {
+        id: 3,
+        description: "Rent",
+        value: "$300",
+        isExpense: true,
+    },
+    {
+        id: 4,
+        description: "Power bill",
+        value: "$50",
+        isExpense: true,
+    },
+];
 
 function App() {
-  return (
-    <div className="App">
-      <Container>
-        <MainHeader title="Budget"/>
+    const [entries, setEntries] = useState(initialEntries);
 
-        <DisplayBalance title="Your Balance:" value="2,550.53" size="small" />
+    const deleteEntry = (id)  => {
+      const result = entries.filter(entry => entry.id !== id)
+      setEntries(result)
+    }
 
-        <DisplayBalances />
+    return (
+        <div className="App">
+            <Container>
+                <MainHeader title="Budget" />
 
-        <MainHeader type="h3" title="History"/>
+                <DisplayBalance
+                    title="Your Balance:"
+                    value="2,550.53"
+                    size="small"
+                />
 
-        <Segment color="red">
-          <Grid columns={3} textAlign="right">
-            <Grid.Row>
-              <Grid.Column width={10} textAlign="left">Something</Grid.Column>
-              <Grid.Column width={3} textAlign="right">$10.00</Grid.Column>
-              <Grid.Column width={3}>
-                <Icon name="edit" bordered />
-                <Icon name="trash" bordered />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
-        <Segment color="green">
-          <Grid columns={3} textAlign="right">
-            <Grid.Row>
-              <Grid.Column width={10} textAlign="left">Something Else</Grid.Column>
-              <Grid.Column width={3} textAlign="right">$15.00</Grid.Column>
-              <Grid.Column width={3}>
-                <Icon name="edit" bordered />
-                <Icon name="trash" bordered />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
-        <Segment color="red">
-          <Grid columns={3} textAlign="right">
-            <Grid.Row>
-              <Grid.Column width={10} textAlign="left">Something</Grid.Column>
-              <Grid.Column width={3} textAlign="right">$20.00</Grid.Column>
-              <Grid.Column width={3}>
-                <Icon name="edit" bordered />
-                <Icon name="trash" bordered />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
+                <DisplayBalances />
 
-        <MainHeader type="h3" title="Add new Transaction" />
-        <NewEntryForm />
+                <MainHeader type="h3" title="History" />
 
-      </Container>
-    </div>
-  );
+                <EntryLines entries={entries} deleteEntry={deleteEntry} />
+
+                <MainHeader type="h3" title="Add new Transaction" />
+                <NewEntryForm />
+            </Container>
+        </div>
+    );
 }
 
 export default App;
