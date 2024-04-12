@@ -7,38 +7,10 @@ import DisplayBalances from "./components/DisplayBalances";
 import { useEffect, useState } from "react";
 import EntryLines from "./components/EntryLines";
 import ModalEdit from "./components/ModalEdit";
-import { createStore } from "redux"
-
-let initialEntries = [
-    {
-        id: 1,
-        description: "Work income",
-        value: 1000,
-        isExpense: false,
-    },
-    {
-        id: 2,
-        description: "Water bill",
-        value: 20,
-        isExpense: true,
-    },
-    {
-        id: 3,
-        description: "Rent",
-        value: 300,
-        isExpense: true,
-    },
-    {
-        id: 4,
-        description: "Power bill",
-        value: 50,
-        isExpense: true,
-    },
-];
+import { useSelector } from 'react-redux'
 
 function App() {
-    const [entries, setEntries] = useState(initialEntries);
-
+    
     const [description, setDescription] = useState("");
     const [value, setValue] = useState("");
     const [isExpense, setIsExpense] = useState(true);
@@ -49,6 +21,8 @@ function App() {
     const [expensesTotal, setExpensesTotal] = useState(0)
     const [total, setTotal] = useState(0)
 
+    const entries = useSelector(state => state.entries)
+
     useEffect(() => {
         if (!isOpen && entryId) {
             const index = entries.findIndex((entry) => entry.id === entryId);
@@ -56,7 +30,8 @@ function App() {
             newEntries[index].description = description;
             newEntries[index].value = value;
             newEntries[index].isExpense = isExpense;
-            setEntries(newEntries);
+            // setEntries(newEntries);
+
             resetEntry();
         }
     }, [isOpen]);
@@ -76,50 +51,6 @@ function App() {
       setIncomeTotal(totalIncome)
     }, [entries])
 
-    const store = createStore((state = (initialEntries), action) => {
-      console.log(action);
-      let newEntries
-      switch (action.type) {
-        case 'ADD_ENTRY':
-          newEntries = state.concat({...action.payload})
-          return newEntries
-        case 'REMOVE_ENTRY':
-          newEntries = state.filter(entry => entry.id !== action.payload.id)
-          return newEntries
-        default:
-          return state
-      }
-    })
-    store.subscribe(() => {
-      console.log('store: ', store.getState());
-    })
-    const payload_add = {
-      id: 5,
-      description: "Hello from Redux",
-      value: 100,
-      isExpense: false
-    }
-    const payload_remove = {
-      id: 1
-    }
-
-    const addEntryRedux = (payload) => {
-      return {type: 'ADD_ENTRY', payload: payload_add}
-    }
-    const removeEntryRedux = (id) => {
-      return {type: 'REMOVE_ENTRY', payload: id}
-    }
-
-    store.dispatch(addEntryRedux(payload_add))
-    store.dispatch(addEntryRedux(payload_add))
-    store.dispatch(addEntryRedux(payload_add))
-    store.dispatch(removeEntryRedux(payload_remove))
-    
-    const deleteEntry = (id) => {
-        const result = entries.filter((entry) => entry.id !== id);
-        setEntries(result);
-    };
-
     const addEntry = () => {
         const result = entries.concat({
             id: entries.length + 1,
@@ -127,7 +58,7 @@ function App() {
             value,
             isExpense,
         });
-        setEntries(result);
+        // setEntries(result);
         resetEntry()
     };
 
@@ -167,7 +98,6 @@ function App() {
 
                 <EntryLines
                     entries={entries}
-                    deleteEntry={deleteEntry}
                     setIsOpen={setIsOpen}
                     editEntry={editEntry}
                 />
