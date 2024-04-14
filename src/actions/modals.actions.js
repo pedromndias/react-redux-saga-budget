@@ -1,5 +1,5 @@
 export const openEditModal = (id) => {
-  return { type: 'OPEN_EDIT_MODAL', payload: id}
+  return { type: 'OPEN_EDIT_MODAL', payload: {id}}
 }
 
 export const closeEditModal = () => {

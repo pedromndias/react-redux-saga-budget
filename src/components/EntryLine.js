@@ -7,8 +7,7 @@ function EntryLine({
     id,
     description,
     value,
-    isExpense = false,
-    editEntry,
+    isExpense = false
 }) {
   const dispatch = useDispatch()
   
