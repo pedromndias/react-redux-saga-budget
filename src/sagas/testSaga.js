@@ -1,5 +1,5 @@
 // ? A saga uses a generator function, that allows it to return multiple values when called. We can enter and exit a function at anytime (yield points)
-import {call, delay, put, take } from 'redux-saga/effects'
+import {call, delay, put, take, takeEvery } from 'redux-saga/effects'
 
 function double (num) {
   return num * 2
@@ -15,6 +15,15 @@ export function* testSaga() {
     console.log(b);
     console.log("Finish saga function");
   }
+}
+
+export function* testSagaTakeEveryProcess({index}) {
+  console.log(`Process for index ${index}`);
+}
+
+export function* testSagaTakeEvery() {
+  const {index} = yield takeEvery('TEST_MESSAGE_3', testSagaTakeEveryProcess)
+  console.log(`Finish takeEvery for index ${index}`);
 }
 
 export function* dispatchTest() {
